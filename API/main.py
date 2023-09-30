@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify
 from connectbd import bd_config
+from id_check import id_livro_exists, id_autor_exists, id_livro_premiacao_exists
 from selects import exec_select_livro, exec_select_autor, exec_select_livro_premiacao
-from deletes import exec_delete_livro #id_exists, exec_delete_autor, exec_delete_livro_premiacao
+from deletes import exec_delete_livro, exec_delete_autor, exec_delete_livro_premiacao
 #from inserts import exec_insert_livro, exec_insert_autor, exec_insert_autor_premiacao
 import psycopg2
 
@@ -19,6 +20,7 @@ def test_database_connection():
             conn.close()
 
 # OPERAÇÕES DE CONSULTA
+
 @app.route('/select/livro')     # para rodar o select na tabela livro
 def select_from_table_livro():
     results = exec_select_livro()
@@ -44,15 +46,47 @@ def select_from_table_livro_premiacao():
         return jsonify({"error": "Erro ao executar a consulta."})
     
 # OPERAÇÕES DE DELETE
-@app.route('/delete/livro/<int:id_livro>', methods=['DELETE'])
+
+@app.route('/delete/livro/<int:id_livro>', methods=['DELETE'])  # para deletar um livro pelo seu ID
 def delete_from_table_livro(id_livro):
-    #if not id_exists(id_livro):
-    #    return jsonify({"error": "ID não encontrado na tabela."}), 404
+    if not id_livro_exists(id_livro):
+        return jsonify({"error": "ID do livro nao encontrado na tabela."}), 404
     
     if exec_delete_livro(id_livro):
         return jsonify({"status": f"Exclusao do registro {id_livro} bem-sucedida."})
     else:
         return jsonify({"error": f"Erro ao excluir o registro {id_livro}."})
+    
+@app.route('/delete/autor/<int:id_autor>', methods=['DELETE'])  # para deletar um autor pelo seu ID
+def delete_from_table_autor(id_autor):
+    if not id_autor_exists(id_autor):
+        return jsonify({"error": "ID do autor nao encontrado na tabela."}), 404
+    
+    if exec_delete_autor(id_autor):
+        return jsonify({"status": f"Exclusao do registro {id_autor} bem-sucedida."})
+    else:
+        return jsonify({"error": f"Erro ao excluir o registro {id_autor}."})
+
+
+@app.route('/delete/livropremiacao', methods=['DELETE'])
+def delete_from_table_livro_premiacao():
+    try:
+        data = request.get_json()
+
+        id_livro = data.get('id_livro')
+        id_premiacao = data.get('id_premiacao')
+
+        if id_livro is None or id_premiacao is None:
+            return jsonify({"error": "Forneça os IDs 'id_livro' e 'id_premiacao' no corpo da solicitação."}), 400
+
+        if not id_livro_premiacao_exists(id_livro, id_premiacao):
+            return jsonify({"error": "Esses IDs nao possuem uma relacao na tabela."}), 404
+    
+        if exec_delete_livro_premiacao(id_livro, id_premiacao):
+            return jsonify({"status": f"Exclusao dos registros {id_livro} e {id_premiacao} bem-sucedida."})
+        else:
+            return jsonify({"error": f"Erro ao excluir o registro {id_livro} e {id_premiacao}."})
+    except Exception as e: return jsonify({"error": str(e)}), 400
 
 if __name__ == '__main__':
     app.run(debug=True)
