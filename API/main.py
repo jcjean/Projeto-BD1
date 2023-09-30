@@ -3,7 +3,7 @@ from connectbd import bd_config
 from id_check import id_livro_exists, id_autor_exists, id_livro_premiacao_exists
 from selects import exec_select_livro, exec_select_autor, exec_select_livro_premiacao
 from deletes import exec_delete_livro, exec_delete_autor, exec_delete_livro_premiacao
-#from inserts import exec_insert_livro, exec_insert_autor, exec_insert_autor_premiacao
+from inserts import exec_insert_autor #, exec_insert_livro, exec_insert_autor_premiacao
 import psycopg2
 
 app = Flask(__name__)
@@ -67,7 +67,6 @@ def delete_from_table_autor(id_autor):
     else:
         return jsonify({"error": f"Erro ao excluir o registro {id_autor}."})
 
-
 @app.route('/delete/livropremiacao', methods=['DELETE'])
 def delete_from_table_livro_premiacao():
     try:
@@ -87,6 +86,28 @@ def delete_from_table_livro_premiacao():
         else:
             return jsonify({"error": f"Erro ao excluir o registro {id_livro} e {id_premiacao}."})
     except Exception as e: return jsonify({"error": str(e)}), 400
+
+# OPERAÇÕES DE INSERT
+
+@app.route('/insert/autor', methods=['POST'])
+def insert_autor():
+    try:
+        data = request.get_json()
+
+        id_autor = data.get('id_autor')
+        p_nome = data.get('primeiro_nome')
+        sobrenome = data.get('sobrenome')
+        nacionalidade = data.get('nacionalidade')
+
+        if id_autor is None or p_nome is None or sobrenome is None or nacionalidade is None:
+            return jsonify({"error": "Forneça os dados do autor no corpo da solicitação (id_autor, primeiro_nome, sobrenome e nacionalidade)."}), 400
+    
+        if exec_insert_autor(id_autor, p_nome, sobrenome, nacionalidade):
+            return jsonify({"status": "Inserção do autor bem-sucedida."})
+        else:
+            return jsonify({"error": "Erro ao inserir o autor."})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
 
 if __name__ == '__main__':
     app.run(debug=True)
