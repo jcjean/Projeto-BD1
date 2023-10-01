@@ -3,7 +3,7 @@ from connectbd import bd_config
 from id_check import id_livro_exists, id_autor_exists, id_livro_premiacao_exists
 from selects import exec_select_livro, exec_select_autor, exec_select_livro_premiacao
 from deletes import exec_delete_livro, exec_delete_autor, exec_delete_livro_premiacao
-from inserts import exec_insert_autor #, exec_insert_livro, exec_insert_autor_premiacao
+from inserts import exec_insert_autor, exec_insert_livro, exec_insert_livro_premiacao
 import psycopg2
 
 app = Flask(__name__)
@@ -106,6 +106,48 @@ def insert_autor():
             return jsonify({"status": "Inserção do autor bem-sucedida."})
         else:
             return jsonify({"error": "Erro ao inserir o autor."})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+    
+@app.route('/insert/livro', methods=['POST'])
+def insert_livro():
+    try:
+        data = request.get_json()
+
+        id_livro = data.get('id_livro')
+        isbn = data.get('isbn')
+        titulo = data.get('titulo')
+        ano_pub = data.get('ano_publicacao')
+        sinopse = data.get('sinopse')
+        id_autor = data.get('id_autor')
+        id_editora = data.get('id_editora')
+
+        if id_livro is None or isbn is None or titulo is None or ano_pub is None or sinopse is None or id_autor is None or id_editora is None:
+            return jsonify({"error": "Forneça os dados do livro no corpo da solicitação (id_livro, isbn, titulo, sinopse, id_autor e id_editora)."}), 400
+    
+        if exec_insert_livro(id_livro, isbn, titulo, ano_pub, sinopse, id_autor, id_editora):
+            return jsonify({"status": "Inserção do livro bem-sucedida."})
+        else:
+            return jsonify({"error": "Erro ao inserir o livro."})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+    
+@app.route('/insert/livropremiado', methods=['POST'])
+def insert_livro_premiacao():
+    try:
+        data = request.get_json()
+
+        id_livro = data.get('id_livro')
+        id_premiacao = data.get('id_premiacao')
+        data_premiacao = data.get('data_premiacao')
+
+        if id_livro is None or id_premiacao is None or data_premiacao is None:
+            return jsonify({"error": "Forneça os dados do livro premiado no corpo da solicitação (id_livro, id_premiacao e data_premiacao)."}), 400
+        
+        if exec_insert_livro_premiacao(id_livro, id_premiacao, data_premiacao):
+            return jsonify({"status": "Inserção do livro e sua premiação bem-sucedida."})
+        else:
+            return jsonify({"error": "Erro ao inserir o as informações."})
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
