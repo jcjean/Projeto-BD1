@@ -22,29 +22,44 @@ def test_database_connection():
 
 # OPERAÇÕES DE CONSULTA
 
-@app.route('/select/livro')     # para rodar o select na tabela livro
+@app.route('/select/livro')    # para rodar o select na tabela livro
 def select_from_table_livro():
-    results = exec_select_livro()
-    if results is not None:
-        return jsonify({"Livros": results})
-    else:
-        return jsonify({"error": "Erro ao executar a consulta."})
+    try:
+        data = request.get_json()
+
+        results = exec_select_livro(data)
+        if results is not None:
+            return jsonify(results)
+        else:
+            return jsonify({"error": "Erro ao executar a consulta."})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
     
 @app.route('/select/autor')     # para rodar o select na tabela autor
 def select_from_table_autor():
-    results = exec_select_autor()
-    if results is not None:
-        return jsonify({"Autores": results})
-    else:
-        return jsonify({"error": "Erro ao executar a consulta."})
-    
+    try:
+        data = request.get_json()
+
+        results = exec_select_autor(data)
+        if results is not None:
+            return jsonify(results)
+        else:
+            return jsonify({"error": "Erro ao executar a consulta."})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
 @app.route('/select/livropremiacao')     # para rodar o select na tabela de relacionamento livro_premiacao
 def select_from_table_livro_premiacao():
-    results = exec_select_livro_premiacao()
-    if results is not None:
-        return jsonify({"Livros e Premiacoes": results})
-    else:
-        return jsonify({"error": "Erro ao executar a consulta."})
+    try:
+        data = request.get_json()
+
+        results = exec_select_livro_premiacao(data)
+        if results is not None:
+            return jsonify({"Livros e Premiacoes": results})
+        else:
+            return jsonify({"error": "Erro ao executar a consulta."})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
     
 # OPERAÇÕES DE DELETE
 
