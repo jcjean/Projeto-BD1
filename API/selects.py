@@ -13,7 +13,7 @@ def exec_select_livro():
 
         col_names = [desc[0] for desc in cursor.description]    # pega o nome das colunas
 
-        # lista de dicionários ordenada
+        '''# lista de dicionários ordenada. Esta formatação está funcionando mas no postman não está sendo exibido de acordo. (ja foi debugado e testado com um print no console e fica certo.)
         format_results = []
         for row in results:
             formatted_result = {
@@ -26,8 +26,17 @@ def exec_select_livro():
                 "id_editora": row[col_names.index("id_editora")]
             }
             format_results.append(formatted_result)
+        return format_results'''
         
-        return format_results
+        # lista de dicionários com nomes de campos e valores
+        formatted_results = []
+        for row in results:
+            formatted_result = {}
+            for i, col_name in enumerate(col_names):
+                formatted_result[col_name] = row[i]
+            formatted_results.append(formatted_result)
+
+        return formatted_results
     except psycopg2.Error as e:
         print("Erro na consulta:", e)
         return None
@@ -76,7 +85,16 @@ def exec_select_livro_premiacao():
         cursor.execute("SELECT * FROM lib.livro_premiacao")
         results = cursor.fetchall()
 
-        return results
+        col_names = [desc[0] for desc in cursor.description]
+        # lista de dicionários com nomes de campos e valores
+        formatted_results = []
+        for row in results:
+            formatted_result = {}
+            for i, col_name in enumerate(col_names):
+                formatted_result[col_name] = row[i]
+            formatted_results.append(formatted_result)
+
+        return formatted_results
     except psycopg2.Error as e:
         print("Erro na consulta:", e)
         return None
