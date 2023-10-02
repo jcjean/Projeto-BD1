@@ -4,7 +4,7 @@ from id_check import id_livro_exists, id_autor_exists, id_livro_premiacao_exists
 from selects import exec_select_livro, exec_select_autor, exec_select_livro_premiacao
 from deletes import exec_delete_livro, exec_delete_autor, exec_delete_livro_premiacao
 from inserts import exec_insert_autor, exec_insert_livro, exec_insert_livro_premiacao
-from updates import exec_update_livro, exec_update_autor
+from updates import exec_update_livro, exec_update_autor, exec_update_livro_premiacao
 import psycopg2
 
 app = Flask(__name__)
@@ -54,9 +54,9 @@ def delete_from_table_livro(id_livro):
         return jsonify({"error": "ID do livro nao encontrado na tabela."}), 404
     
     if exec_delete_livro(id_livro):
-        return jsonify({"status": f"Exclusao do registro {id_livro} bem-sucedida."})
+        return jsonify({"status": f"Exclusao do livro {id_livro} bem-sucedida."})
     else:
-        return jsonify({"error": f"Erro ao excluir o registro {id_livro}."})
+        return jsonify({"error": f"Erro ao excluir o livro {id_livro}."})
     
 @app.route('/delete/autor/<int:id_autor>', methods=['DELETE'])  # para deletar um autor pelo seu ID
 def delete_from_table_autor(id_autor):
@@ -64,9 +64,9 @@ def delete_from_table_autor(id_autor):
         return jsonify({"error": "ID do autor nao encontrado na tabela."}), 404
     
     if exec_delete_autor(id_autor):
-        return jsonify({"status": f"Exclusao do registro {id_autor} bem-sucedida."})
+        return jsonify({"status": f"Exclusao do autor {id_autor} bem-sucedida."})
     else:
-        return jsonify({"error": f"Erro ao excluir o registro {id_autor}."})
+        return jsonify({"error": f"Erro ao excluir o autor {id_autor}."})
 
 @app.route('/delete/livropremiacao', methods=['DELETE'])    # para deletar da tabela livro_premiacao pelo seu ID
 def delete_from_table_livro_premiacao():
@@ -148,18 +148,22 @@ def insert_livro_premiacao():
         if exec_insert_livro_premiacao(id_livro, id_premiacao, data_premiacao):
             return jsonify({"status": "Inserção do livro e sua premiação bem-sucedida."})
         else:
-            return jsonify({"error": "Erro ao inserir o as informações."})
+            return jsonify({"error": "Erro ao inserir as informações."})
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
 # OPERAÇÕES DE UPDATE
 
-@app.route('/update/livro/<int:id_livro>', methods=['PUT'])     # para atualizar o dado de um autor na tabela
+@app.route('/update/livro/<int:id_livro>', methods=['PUT'])     # para atualizar o dado de um livro na tabela
 def update_livro(id_livro):
     try:
         data = request.get_json()
+
         if not data:
-            return jsonify({"error": "Forneça os campos a serem atualizados no corpo da solicitação em formato JSON."}), 400
+            return jsonify({"error": "Forneça os campos a serem atualizados no corpo da solicitação: id_livro, isbn, titulo, sinopse, id_autor e/ou id_editora."}), 400
+        
+        if not id_livro_exists(id_livro):
+            return jsonify({"error": "ID do livro nao encontrado na tabela."}), 404
         
         if exec_update_livro(id_livro, data):
             return jsonify({"status": f"Atualização do livro {id_livro} bem-sucedida."})
@@ -168,19 +172,40 @@ def update_livro(id_livro):
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
-@app.route('/update/autor/<int:id_autor>', methods=['PUT'])     # para atualizar o dado de um livro na tabela
+@app.route('/update/autor/<int:id_autor>', methods=['PUT'])     # para atualizar o dado de um autor na tabela
 def update_autor(id_autor):
     try:
         data = request.get_json()
         if not data:
-            return jsonify({"error": "Forneça os campos a serem atualizados no corpo da solicitação em formato JSON."}), 400
+            return jsonify({"error": "Forneça os campos a serem atualizados no corpo da solicitação: id_autor, primeiro_nome, sobrenome e/ou nacionalidade."}), 400
         
+        if not id_autor_exists(id_autor):
+            return jsonify({"error": "ID do autor nao encontrado na tabela."}), 404
+
         if exec_update_autor(id_autor, data):
             return jsonify({"status": f"Atualização do autor {id_autor} bem-sucedida."})
         else:
             return jsonify({"error": f"Erro ao atualizar o autor {id_autor}."})
     except Exception as e:
-        return jsonify({"error": str(e)}), 400    
+        return jsonify({"error": str(e)}), 400
+
+@app.route('/update/livropremiacao/<int:id_livro>/<int:id_premiacao>', methods=['PUT'])     # para atualizar o dado de um livro premiado na tabela livro_premiacao
+def update_livro_premiacao(id_livro, id_premiacao):
+    try:
+        data = request.get_json()
+
+        if not data:
+            return jsonify({"error": "Forneça os campos a serem atualizados no corpo da solicitação: id_livro, id_premiacao e/ou data_premiacao"}), 400
+        
+        if not id_livro_premiacao_exists(id_livro, id_premiacao):
+            return jsonify({"error": "Esses IDs nao possuem uma relacao na tabela."}), 404
+
+        if exec_update_livro_premiacao(id_livro, id_premiacao, data):
+            return jsonify({"status": f"Atualização da relação livro-premiacao bem-sucedida para livro {id_livro} e premiação {id_premiacao}."})
+        else:
+            return jsonify({"error": f"Erro ao atualizar o livro."})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400 
 
 if __name__ == '__main__':
     app.run(debug=True)
