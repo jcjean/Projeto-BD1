@@ -8,7 +8,7 @@ def exec_select_livro():
         cursor = conn.cursor()
 
         # consulta na tabela livro
-        cursor.execute("SELECT * FROM lib.livro ORDER BY id_livro")
+        cursor.execute("SELECT id_livro, isbn, titulo, ano_publicacao, sinopse, id_autor, id_editora FROM lib.livro ORDER BY id_livro")
         results = cursor.fetchall()
 
         col_names = [desc[0] for desc in cursor.description]    # pega o nome das colunas
@@ -53,7 +53,7 @@ def exec_select_autor():
         cursor = conn.cursor()
 
         # consulta na tabela autor
-        cursor.execute("SELECT * FROM lib.autor ORDER BY id_autor")
+        cursor.execute("SELECT id_autor, primeiro_nome, sobrenome, nacionalidade FROM lib.autor ORDER BY id_autor")
         results = cursor.fetchall()
 
         col_names = [desc[0] for desc in cursor.description]
@@ -82,7 +82,7 @@ def exec_select_livro_premiacao():
         cursor = conn.cursor()
 
         # consulta na tabela livro_premiacao
-        cursor.execute("SELECT * FROM lib.livro_premiacao")
+        cursor.execute("SELECT id_livro, id_premiacao, data_premiacao FROM lib.livro_premiacao")
         results = cursor.fetchall()
 
         col_names = [desc[0] for desc in cursor.description]
