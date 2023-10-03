@@ -38,7 +38,6 @@ def exec_update_autor(id_autor, novos_dados):
         conn = psycopg2.connect(**bd_config)
         cursor = conn.cursor()
 
-        # Cria uma string de atualização dinamicamente com base nos campos fornecidos
         update_query = "UPDATE lib.autor SET "
         update_values = []
 

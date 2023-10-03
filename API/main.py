@@ -119,7 +119,7 @@ def insert_autor():
             return jsonify({"error": "Forneça os dados do autor no corpo da solicitação (id_autor, primeiro_nome, sobrenome e nacionalidade)."}), 400
     
         if exec_insert_autor(id_autor, p_nome, sobrenome, nacionalidade):
-            return jsonify({"status": "Inserção do autor bem-sucedida."})
+            return jsonify({"status": f"Inserção do autor {p_nome}{sobrenome} bem-sucedida."})
         else:
             return jsonify({"error": "Erro ao inserir o autor."})
     except Exception as e:
@@ -142,7 +142,7 @@ def insert_livro():
             return jsonify({"error": "Forneça os dados do livro no corpo da solicitação (id_livro, isbn, titulo, sinopse, id_autor e id_editora)."}), 400
     
         if exec_insert_livro(id_livro, isbn, titulo, ano_pub, sinopse, id_autor, id_editora):
-            return jsonify({"status": "Inserção do livro bem-sucedida."})
+            return jsonify({"status": f"Inserção do livro {titulo} bem-sucedida."})
         else:
             return jsonify({"error": "Erro ao inserir o livro."})
     except Exception as e:

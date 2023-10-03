@@ -44,7 +44,7 @@ def exec_insert_livro_premiacao(id_livro, id_premiacao, data_premiacao):
         conn = psycopg2.connect(**bd_config)
         cursor = conn.cursor()
 
-        # Insere um novo livro na tabela 
+        # Insere novas informações na tabela de relacionamento 
         cursor.execute("INSERT INTO lib.livro_premiacao (id_livro, id_premiacao, data_premiacao) VALUES (%s, %s, %s)", (id_livro, id_premiacao, data_premiacao))
         conn.commit()
 

@@ -7,7 +7,7 @@ def exec_delete_livro(id_livro):
         conn = psycopg2.connect(**bd_config)
         cursor = conn.cursor()
 
-        # deleta um livro da tabela
+        # Deleta um livro da tabela
         cursor.execute("DELETE FROM lib.livro WHERE id_livro = %s", (id_livro,))
         conn.commit()
 
@@ -27,7 +27,7 @@ def exec_delete_autor(id_autor):
         conn = psycopg2.connect(**bd_config)
         cursor = conn.cursor()
 
-        # deleta um autor da tabela
+        # Deleta um autor da tabela
         cursor.execute("DELETE FROM lib.autor WHERE id_autor = %s", (id_autor,))
         conn.commit()
 
@@ -47,7 +47,7 @@ def exec_delete_livro_premiacao(id_livro, id_premiacao):
         conn = psycopg2.connect(**bd_config)
         cursor = conn.cursor()
 
-        # deleta um livro e a premiação da tabela de relacionamento
+        # Deleta um livro e a premiação da tabela de relacionamento
         cursor.execute("DELETE FROM lib.livro_premiacao WHERE id_livro = %s AND id_premiacao = %s", (id_livro, id_premiacao))
         conn.commit()
 

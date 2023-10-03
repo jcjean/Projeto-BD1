@@ -20,7 +20,7 @@ def exec_select_livro(parametros):
         results = cursor.fetchall()
 
         if results:
-            # Formate os resultados com as especificações dos campos da tabela
+            # Formatando os resultados com as especificações dos campos da tabela
             formatted_results = []
             for result in results:
                 id_livro, isbn, titulo, ano_publicacao, sinopse, id_autor, id_editora = result
@@ -64,7 +64,7 @@ def exec_select_autor(parametros):
         results = cursor.fetchall()
 
         if results:
-            # Formate os resultados com as especificações dos campos da tabela
+            # Formatando os resultados com as especificações dos campos da tabela
             formatted_results = []
             for result in results:
                 id_autor, primeiro_nome, sobrenome, nacionalidade = result
@@ -95,7 +95,7 @@ def exec_select_livro_premiacao(parametros):
         id_premiacao = parametros.get('id_premiacao')
         id_livro = parametros.get('id_livro')
 
-        # consulta na tabela autor
+        # consulta na tabela de relacionamento livro_premiacao
         if not id_premiacao and not id_livro:
             cursor.execute("SELECT * FROM lib.livro_premiacao")
         elif id_premiacao:
@@ -105,7 +105,7 @@ def exec_select_livro_premiacao(parametros):
         results = cursor.fetchall()
 
         if results:
-            # Formate os resultados com as especificações dos campos da tabela
+
             formatted_results = []
             for result in results:
                 id_livro, id_premiacao, data_premiacao = result

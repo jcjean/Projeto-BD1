@@ -6,7 +6,7 @@ def id_livro_exists(id_livro):
         conn = psycopg2.connect(**bd_config)
         cursor = conn.cursor()
 
-        # Verifique se o ID existe na tabela
+        # Verifique se o ID existe na tabela livro
         cursor.execute("SELECT id_livro FROM lib.livro WHERE id_livro = %s", (id_livro,))
         result = cursor.fetchone()
 
@@ -25,7 +25,7 @@ def id_autor_exists(id_autor):
         conn = psycopg2.connect(**bd_config)
         cursor = conn.cursor()
 
-        # Verifique se o ID existe na tabela
+        # Verifique se o ID existe na tabela autor
         cursor.execute("SELECT id_autor FROM lib.autor WHERE id_autor= %s", (id_autor,))
         result = cursor.fetchone()
 
@@ -44,7 +44,7 @@ def id_livro_premiacao_exists(id_livro, id_premiacao):
         conn = psycopg2.connect(**bd_config)
         cursor = conn.cursor()
 
-        # Verifique se o ID existe na tabela
+        # Verifique se o IDs existem na tabela de relacionamento
         cursor.execute("SELECT id_livro, id_premiacao FROM lib.livro_premiacao WHERE id_livro = %s AND id_premiacao= %s", (id_livro, id_premiacao))
         result = cursor.fetchone()
 
