@@ -9,7 +9,7 @@ Repositório para armazenar API e CRUD solicitadas no projeto final da matéria 
 |updates.py| [Funções de update](API/updates.py)|
 |inserts.py| [Funções de insert](API/inserts.py)|
 |deletes.py| [Funções de delete](API/deletes.py)|
-|idcheck.py| [Funções para checar se id existe na tabela](APY/idchecks.py)|
+|idcheck.py| [Funções para checar se id existe na tabela](API/idchecks.py)|
 
 # Funcionamento da API:
 > [!IMPORTANT]
