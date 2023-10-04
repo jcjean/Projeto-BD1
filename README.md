@@ -1,6 +1,20 @@
 # Projeto de Banco de Dados📚
+Repositório para armazenar API e CRUD solicitadas no projeto final da matéria de banco de dados.
+## Arquivos 
+| Título | Função |
+|-------|---------|
+|main.py| [Rotas](main.py)|
+|connectbd.py| [Configurações de conexão do postgresql](connectbd.py)|
+|selects.py| [Funções de consulta](selects.py)|
+|updates.py| [Funções de update](updates.py)|
+|inserts.py| [Funções de insert](inserts.py)|
+|deletes.py| [Funções de delete](deletes.py)|
+|idcheck.py| [Funções para checar se id existe na tabela](idchecks.md)|
 
 # Funcionamento da API:
+> [!important] Executar o [main.py](main.py) para rodar a API.
+>
+> Também é preciso executar o comando **pip install flask** e **pip install psycopg2-binary** em seu terminal para instalar as bibliotecas necessárias do python.
 
 - Método ```exec_select_livro():```
   - /select/livro -- rota para consultar livro 
