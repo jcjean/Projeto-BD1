@@ -3,7 +3,7 @@ Repositório para armazenar API e CRUD solicitadas no projeto final da matéria 
 ## Arquivos 
 | Título | Função |
 |-------|---------|
-|main.py| [Rotas](main.py)|
+|main.py| [Rotas](API/main.py)|
 |connectbd.py| [Configurações de conexão do postgresql](connectbd.py)|
 |selects.py| [Funções de consulta](selects.py)|
 |updates.py| [Funções de update](updates.py)|
