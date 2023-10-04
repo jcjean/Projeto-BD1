@@ -12,9 +12,13 @@ Repositório para armazenar API e CRUD solicitadas no projeto final da matéria 
 |idcheck.py| [Funções para checar se id existe na tabela](idchecks.md)|
 
 # Funcionamento da API:
-> [!important] Executar o [main.py](main.py) para rodar a API.
+> [!IMPORTANT]
+> 
+> Executar o [main.py](main.py) para rodar a API.
 >
 > Também é preciso executar o comando **pip install flask** e **pip install psycopg2-binary** em seu terminal para instalar as bibliotecas necessárias do python.
+
+---
 
 - Método ```exec_select_livro():```
   - /select/livro -- rota para consultar livro 
@@ -175,7 +179,8 @@ Campos que serão atualizado:
   "ano_publicacao": 2020
 }
 ```
-------
+-----
+
 - Método ```exec_update_autor():```
   - /update/autor/<int:id_autor> -- rota para atualizar dados do autor
 
@@ -200,6 +205,8 @@ Campos que serão atualizado:
   "sobrenome": "da Silva",
 }
 ```
+----
+
 - Método ```exec_update_livro_premiacao():```
   - /update/livropremiacao/<int:id_livro>/<int:id_premiacao> -- rota para atualizar dados do livro premiado
 
